@@ -85,7 +85,7 @@ TARGET_NO_INITLOGO := true
 BOARD_USE_MHEAP_SCREENSHOT := true
 
 # Hardware
-BOARD_HARDWARE_CLASS := device/lge/vee-common/cmhw
+BOARD_HARDWARE_CLASS := device/lge/vee-common/mkhw
 
 # BT
 BOARD_HAVE_BLUETOOTH := true
