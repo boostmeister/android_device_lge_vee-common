@@ -24,10 +24,6 @@ TARGET_GLOBAL_CPPFLAGS += -mfloat-abi=softfp -mfpu=neon-vfpv4
 COMMON_GLOBAL_CFLAGS += -DUSE_MDP3
 COMMON_GLOBAL_CFLAGS += -DLPA_DEFAULT_BUFFER_SIZE=480
 
-# Compiler Optimization
-ARCH_ARM_HIGH_OPTIMIZATION := true
-ARCH_ARM_HIGH_OPTIMIZATION_COMPAT := true
-
 TARGET_NO_BOOTLOADER := true
 TARGET_BOOTLOADER_BOARD_NAME := vee
 TARGET_BOARD_PLATFORM := msm7x27a
@@ -60,20 +56,12 @@ BOARD_USES_QCOM_GPS := true
 BOARD_VENDOR_QCOM_GPS_LOC_API_AMSS_VERSION := 50000
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
 
-# Media
-TARGET_QCOM_MEDIA_VARIANT := caf
 
 # Audio
-TARGET_QCOM_AUDIO_VARIANT := caf
 BOARD_USES_LEGACY_ALSA_AUDIO := true
 TARGET_HAS_QACT := true
 
-# FM
-BOARD_HAVE_QCOM_FM := true
-QCOM_FM_ENABLED := true
-
 # Display
-TARGET_QCOM_DISPLAY_VARIANT := caf
 BOARD_ADRENO_DECIDE_TEXTURE_TARGET := true
 USE_OPENGL_RENDERER := true
 TARGET_USES_ION := true
@@ -118,51 +106,22 @@ WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_P2P := "p2p"
 WIFI_DRIVER_FW_PATH_PARAM := "/data/misc/wifi/fwpath"
 
-# Recovery
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-RECOVERY_FSTAB_VERSION := 2
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
-TARGET_RECOVERY_QCOM_RTC_FIX := true
-BOARD_USE_CUSTOM_RECOVERY_FONT := "<font_7x16.h>"
-BOARD_USES_MMCUTILS := true
-BOARD_HAS_NO_MISC_PARTITION := true
-BOARD_HAS_NO_SELECT_BUTTON := true
+# Enable dex-preoptimization to speed up first boot sequence
+ifeq ($(HOST_OS),linux)
+  ifeq ($(TARGET_BUILD_VARIANT),userdebug)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+WITH_DEXPREOPT_PIC := true
+DONT_DEXPREOPT_PREBUILTS := true
 
-# TWRP
-RECOVERY_VARIANT := omni
-TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "data"
-TW_EXTERNAL_STORAGE_PATH := "/external sd"
-TW_EXTERNAL_STORAGE_MOUNT_POINT := "external_sd"
-TW_DEFAULT_EXTERNAL_STORAGE := true
-TW_FLASH_FROM_STORAGE := true
-TW_NO_CPU_TEMP := true
-TW_NO_SCREEN_TIMEOUT := true
-TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
-TW_MAX_BRIGHTNESS := 225
+# Enable Minikin text layout engine (will be the default soon)
+USE_MINIKIN := true
 
-# Sepolicy
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
+
 BOARD_SEPOLICY_DIRS += \
 	device/lge/vee-common/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-	file_contexts \
-	app.te \
-	bluetooth.te \
-	device.te \
-	domain.te \
-	drmserver.te \
-	file.te \
-	hci_init.te \
-	healthd.te \
-	init.te \
-	init_shell.te \
-	keystore.te \
-	kickstart.te \
-	mediaserver.te \
-	netd.te \
-	rild.te \
-	surfaceflinger.te \
-	system.te \
-	ueventd.te \
-	wpa_supplicant.te

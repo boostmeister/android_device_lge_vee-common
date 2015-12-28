@@ -92,20 +92,21 @@ PRODUCT_PACKAGES += setup_fs
 # Usb
 PRODUCT_PACKAGES += com.android.future.usb.accessory
 
-# Audio
-PRODUCT_PACKAGES += audio.a2dp.default
-PRODUCT_PACKAGES += audio.usb.default
-PRODUCT_PACKAGES += audio.r_submix.default
-PRODUCT_PACKAGES += audio.primary.msm7x27a
-PRODUCT_PACKAGES += audio_policy.msm7x27a
-PRODUCT_PACKAGES += libaudio-resampler
-PRODUCT_PACKAGES += libaudioparameter
-PRODUCT_PACKAGES += libaudioutils
+#wifi
+PRODUCT_PACKAGES += \
+    libwpa_client \
+    hostapd \
+    dhcpcd.conf \
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 # Light HAL
 PRODUCT_PACKAGES += lights.msm7x27a
 
-# Camera Hal
-PRODUCT_PACKAGES += camera.msm7x27a
+# ART
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dex2oat-filter=balanced \
+    dalvik.vm.dex2oat-flags=--no-watch-dog \
+    dalvik.vm.image-dex2oat-filter=speed
 
 include device/lge/vee-common/system_prop.mk
